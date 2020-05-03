@@ -1,10 +1,10 @@
-﻿using DodawaniePoRzymsku;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
+using DodawaniePoRzymsku;
 
 namespace ConRomTests
 {
@@ -23,7 +23,7 @@ namespace ConRomTests
         {
             //arrange
             //act
-            int actual = Program.Roman2Arab(Program.Sum(rn1, rn2));
+            int actual = Program.Roman2Arabic(Program.Sum(rn1, rn2));
 
             //assert
             Assert.Equal(arabicNb, actual);

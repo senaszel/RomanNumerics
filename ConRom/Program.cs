@@ -10,46 +10,42 @@ namespace DodawaniePoRzymsku
     {
         public static void Main()
         {
-            Console.WriteLine("Dodawanie dwoch liczb nie wiekszych niz 1000 po rzymsku:".ToUpper());
+            Console.WriteLine("Program calculating sum of two roman numerals, not greater than M".ToUpper());
 
             string nb1 = null;
             string nb2 = null;
-            bool two_nbs = false;
-            int ktora = two_nbs == false ? 1 : 2;
+            bool both_nbs_entered = false;
+            int whichOne = both_nbs_entered == false ? 1 : 2;
+
             do
             {
-                Console.WriteLine("\nPodaj {0} liczbe, nie wieksza niz 1000: ", ktora);
-                int liczbaUzytkownika = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("\nInput {0} roman numeral, not greater than M: ", whichOne);
+                string usersNumber = Console.ReadLine().ToUpper();
 
-                if (liczbaUzytkownika > 1000)
+                if (Roman2Arabic(usersNumber) > 1000)
                 {
-                    Console.WriteLine("\t\tMiala byc nie wieksza niz 1000!");
+                    Console.WriteLine("\t\tNot greater than M!");
                 }
                 else
                 {
-                    string cyfraRzymska = Convert2Roman(liczbaUzytkownika);
-                    Console.WriteLine("\t\t\t{0}", cyfraRzymska);
+                    Console.WriteLine("\t\t\t{0}", usersNumber);
                     if (nb1 is null == false)
                     {
-                        nb2 = cyfraRzymska;
-                        two_nbs = true;
+                        nb2 = usersNumber;
+                        both_nbs_entered = true;
                     }
                     else
                     {
-                        nb1 = cyfraRzymska;
+                        nb1 = usersNumber;
                     }
-
                 }
+            } while (!both_nbs_entered);
+
+            Console.WriteLine("\n\nNumerals given by you are:\n \n\t{0}\n\t{1}", nb1, nb2);
+            Console.WriteLine("\n\nSum of them is:  {0}", Sum(nb1, nb2).ToString());
+            Console.WriteLine("\n\nAs Arabic numeral: {0}", Roman2Arabic(Sum(nb1, nb2)));
 
 
-            } while (!two_nbs);
-
-            Console.WriteLine("\n\n");
-            Console.WriteLine("Podane liczby to:\n \n\t{0}\n\t{1}", nb1, nb2);
-
-
-            Console.WriteLine("\n\n Wynikiem sumowania tych liczb jest:  {0}", Sum(nb1, nb2).ToString());
-            Console.WriteLine("\n po naszemu: {0}", Roman2Arab(Sum(nb1, nb2)));
             ConsoleKey exitExit;
             do
             {
@@ -58,227 +54,118 @@ namespace DodawaniePoRzymsku
             } while (exitExit != ConsoleKey.Escape);
         }
 
+
+        /// <summary>
+        /// Sums two roman numerics. Converting them to arabic during process. 
+        /// </summary>
+        /// <param name="nb1">First term of result</param>
+        /// <param name="nb2">Second term of result</param>
+        /// <returns>Returns sum of both terms.</returns>
         public static string Sum(string nb1, string nb2)
         {
-            int result = Roman2Arab(nb1) + Roman2Arab(nb2);
-            return Convert2Roman(result);
+            int result = Roman2Arabic(nb1) + Roman2Arabic(nb2);
+
+
+            return Arabic2Roman(result);
         }
 
-        public static int Roman2Arab(string romanNumber)
+
+        /// <summary>
+        /// Converts roman numerals to arabic numerals.
+        /// </summary>
+        /// <param name="romanNumber">Takes roman numeral as parameter.</param>
+        /// <returns>Returns arabic numeral.</returns>
+        public static int Roman2Arabic(string romanNumber)
         {
-            char[] arr = romanNumber.ToCharArray();
-            int[] arabArr = new int[] { 1, 5, 10, 50, 100, 500, 1000 };
-            char[] transitionArr = new char[] { 'I', 'V', 'X', 'L', 'C', 'D', 'M' };
-            int[] resultingArr = new int[arr.Length];
-            for (int i = 0; i < arr.Length; i++)
+            char[] initialCharArrMadeOfRomanNumbers = romanNumber.ToCharArray();
+            int[] resultingIntArr = new int[initialCharArrMadeOfRomanNumbers.Length];
+
+            Dictionary<char, int> roman2arab_NumeralsDictionary = new Dictionary<char, int>
             {
-                for (int j = 0; j < transitionArr.Length; j++)
+                { 'I', 1 },
+                { 'V', 5 },
+                { 'X', 10 },
+                { 'L', 50 },
+                { 'C', 100 },
+                { 'D', 500 },
+                { 'M', 1000 }
+            };
+
+            for (int i = 0; i < initialCharArrMadeOfRomanNumbers.Length; i++)
+            {
+                if (roman2arab_NumeralsDictionary.TryGetValue(initialCharArrMadeOfRomanNumbers[i], out int value))
                 {
-                    if (arr[i] == transitionArr[j])
+                    if (i + 1 != initialCharArrMadeOfRomanNumbers.Length)
                     {
-                        resultingArr[i] = arabArr[j];
-                    }
-                }
-            }
-
-            Console.WriteLine("\n\ndla liczby: {0}", romanNumber);
-            for (int i = 0; i < resultingArr.Length; i++)
-            {
-                Console.WriteLine(resultingArr[i]);
-            }
-            for (int i = 0; i < resultingArr.Length; i++)
-            {
-                if (i + 1 != resultingArr.Length)
-                {
-                    if (resultingArr[i] < resultingArr[i + 1])
-                    {
-                        resultingArr[i] = resultingArr[i] * (-1);
-                    }
-                }
-            }
-            Console.WriteLine("\n\nPo zastosowaniu algorytmu przeliczajacego dla liczby: {0}", romanNumber);
-            for (int i = 0; i < resultingArr.Length; i++)
-            {
-                Console.WriteLine(resultingArr[i]);
-            }
-
-
-
-            return resultingArr.Sum();
-        }
-
-        public static string Convert2Roman(int cyfraArabska,
-                                     string cyfraRzymska = "")
-        {
-            if (cyfraArabska == 0)
-            {
-                if (cyfraRzymska == "")
-                {
-
-                    return "0";
-                }
-                else
-                {
-                    return cyfraRzymska;
-                }
-
-            }
-
-            if (cyfraArabska == 1000)
-            {
-
-                cyfraRzymska += "M";
-                return cyfraRzymska;
-            }
-            if (cyfraArabska > 1000)
-            {
-                cyfraRzymska += "M";
-                return Convert2Roman(cyfraArabska - 1000, cyfraRzymska);
-            }
-            else
-            {
-
-                if (cyfraArabska == 900)
-                {
-
-                    cyfraRzymska += "CM";
-                    return cyfraRzymska;
-                }
-
-                if (cyfraArabska > 900)
-                {
-                    cyfraRzymska += "CM";
-                    return Convert2Roman(cyfraArabska - 900, cyfraRzymska);
-                }
-                else
-                {
-                    if (cyfraArabska == 500)
-                    {
-                        cyfraRzymska += "D";
-                        return cyfraRzymska;
-                    }
-
-                    if (cyfraArabska > 500)
-                    {
-                        cyfraRzymska += "D";
-                        return Convert2Roman(cyfraArabska - 500, cyfraRzymska);
+                        if (roman2arab_NumeralsDictionary.TryGetValue(initialCharArrMadeOfRomanNumbers[i + 1], out int nextValue))
+                        {
+                            resultingIntArr[i] = value < nextValue ? value * (-1) : value;
+                        }
                     }
                     else
                     {
-                        if (cyfraArabska == 400)
-                        {
-                            cyfraRzymska += "CD";
-                            return cyfraRzymska;
-                        }
+                        resultingIntArr[i] = value;
+                    }
+                }
+                else
+                {
+                    return -1;
+                }
+            }
 
-                        if (cyfraArabska > 400)
-                        {
-                            cyfraRzymska += "CD";
-                            return Convert2Roman(cyfraArabska - 400, cyfraRzymska);
-                        }
-                        else
-                        {
-                            if (cyfraArabska == 100)
-                            {
-                                cyfraRzymska += "C";
-                                return cyfraRzymska;
-                            }
-                            if (cyfraArabska > 100)
-                            {
-                                cyfraRzymska += "C";
-                                return Convert2Roman(cyfraArabska - 100, cyfraRzymska);
-                            }
-                            else
-                            {
-                                if (cyfraArabska == 90)
-                                {
-                                    cyfraRzymska += "XC";
-                                    return cyfraRzymska;
-                                }
 
-                                if (cyfraArabska > 90)
-                                {
-                                    cyfraRzymska += "XC";
-                                    return Convert2Roman(cyfraArabska - 90, cyfraRzymska);
-                                }
-                                else
-                                {
-                                    if (cyfraArabska == 50)
-                                    {
-                                        cyfraRzymska += "L";
-                                        return cyfraRzymska;
-                                    }
-                                    if (cyfraArabska > 50)
-                                    {
-                                        cyfraRzymska += "L";
-                                        return Convert2Roman(cyfraArabska - 50, cyfraRzymska);
-                                    }
-                                    else
-                                    {
-                                        if (cyfraArabska == 40)
-                                        {
-                                            cyfraRzymska += "XL";
-                                            return cyfraRzymska;
-                                        }
+            return resultingIntArr.Sum();
+        }
 
-                                        if (cyfraArabska > 40)
-                                        {
-                                            cyfraRzymska += "XL";
-                                            return Convert2Roman(cyfraArabska - 40, cyfraRzymska);
-                                        }
-                                        else
-                                        {
-                                            if (cyfraArabska == 10)
-                                            {
-                                                cyfraRzymska += "X";
-                                                return cyfraRzymska;
-                                            }
 
-                                            if (cyfraArabska > 10)
-                                            {
-                                                cyfraRzymska += "X";
-                                                return Convert2Roman(cyfraArabska - 10, cyfraRzymska);
-                                            }
-                                            else
-                                            {
-                                                if (cyfraArabska == 9)
-                                                {
-                                                    cyfraRzymska += "IX";
-                                                    return cyfraRzymska;
-                                                }
+        /// <summary>
+        /// Converts arabic numerals to roman numerals.
+        /// </summary>
+        /// <param name="arabicNumeral">Takes arabic numeral as parameter.</param>
+        /// <param name="romanNumeral">Second parameter ought to be left empty as by default. It is used in recursive converting process.</param>
+        /// <returns>Returns roman numeral.</returns>
+        public static string Arabic2Roman(int arabicNumeral, string romanNumeral = "")
+        {
+            Dictionary<int, string> arabic2romanDictionary = new Dictionary<int, string>
+            {
+                { 1000, "M" },
+                { 900, "CM" },
+                { 500, "D" },
+                { 400, "CD" },
+                { 100, "C" },
+                { 90, "XC" },
+                { 50, "L" },
+                { 40, "XL" },
+                { 10, "X" },
+                { 9, "IX" },
+                { 5, "V" },
+                { 4, "IV"},
+                { 1, "I" },
+                { 0, "" }
+            };
 
-                                                if (cyfraArabska == 5)
-                                                {
-                                                    cyfraRzymska += "V";
-                                                    return cyfraRzymska;
-                                                }
-
-                                                if (cyfraArabska > 5)
-                                                {
-                                                    cyfraRzymska += "V";
-                                                    return Convert2Roman(cyfraArabska - 5, cyfraRzymska);
-                                                }
-
-                                                if (cyfraArabska == 4)
-                                                {
-                                                    cyfraRzymska += "IV";
-                                                    return Convert2Roman(cyfraArabska - 4, cyfraRzymska);
-                                                }
-
-                                                else
-                                                {
-                                                    cyfraRzymska += "I";
-                                                    return Convert2Roman(cyfraArabska - 1, cyfraRzymska);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
+            int change;
+            foreach (KeyValuePair<int, string> item in arabic2romanDictionary)
+            {
+                if (arabicNumeral == item.Key)
+                {
+                    romanNumeral += item.Value;
+                    return romanNumeral;
+                }
+                else
+                {
+                    if (arabicNumeral - item.Key > -1)
+                    {
+                        romanNumeral += item.Value;
+                        change = item.Key;
+                        return Arabic2Roman(arabicNumeral - change, romanNumeral);
                     }
                 }
             }
-        } 
-    } // end of Class Program
-} // end of namespace
+
+
+            return romanNumeral;
+        }
+
+    } // end of Class 
+} // end of Namespace

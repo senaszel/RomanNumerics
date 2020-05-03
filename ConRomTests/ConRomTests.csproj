@@ -58,9 +58,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConRomTests.cs" />
+    <Compile Include="Arabic2RomanTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Roman2Arab.cs" />
+    <Compile Include="Roman2ArabicTests.cs" />
     <Compile Include="SumTests.cs" />
   </ItemGroup>
   <ItemGroup>

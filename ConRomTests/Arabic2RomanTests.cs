@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
+﻿using Xunit;
 using DodawaniePoRzymsku;
 
 namespace ConRomTests
 {
-    public class ConRomTests
+    public class Arabic2RomanTests
     {
-
         [Theory]
+        [InlineData(19, "XIX")]//celowo bledny
         [InlineData(25, "XXV")]
         [InlineData(44, "XLIV")]
         [InlineData(148, "CXLVIII")]
@@ -23,7 +18,6 @@ namespace ConRomTests
         [InlineData(245, "CCXLV")]
         [InlineData(497, "CDXCVII")]
         [InlineData(992, "CMXCII")]
-
         [InlineData(999, "CMXCIX")]
         [InlineData(1, "I")]
         [InlineData(5, "V")]
@@ -35,15 +29,15 @@ namespace ConRomTests
         [InlineData(500, "D")]
         [InlineData(900, "CM")]
         [InlineData(1000, "M")]
-        public static void ConRom_Should_Return_RomanNumber(int arab, string roman)
+        public static void Arabic2Roman_Should_Return_RomanNumeral(int arab, string roman)
         {
-            //arrenge
+            //arrange
 
-            //act
-            string actual = Program.Convert2Roman(arab);
+            string actual = Program.Arabic2Roman(arab);
 
             //assert
             Assert.Equal(roman, actual);
+
         }
     }
 }
